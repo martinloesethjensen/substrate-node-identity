@@ -23,6 +23,10 @@ use sp_version::RuntimeVersion;
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
 
+use frame_system::{EnsureOneOf, EnsureRoot};
+
+use sp_core::u32_trait::{_1, _2};
+
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
@@ -266,6 +270,37 @@ impl pallet_template::Trait for Runtime {
 	type Event = Event;
 }
 
+parameter_types! {
+	pub const BasicDeposit: u64 = 10;
+	pub const FieldDeposit: u64 = 10;
+	pub const SubAccountDeposit: u64 = 10;
+	pub const MaxSubAccounts: u32 = 2;
+	pub const MaxAdditionalFields: u32 = 2;
+	pub const MaxRegistrars: u32 = 20;
+}
+
+type CouncilCollective = pallet_collective::Instance1;
+type MoreThanHalfCouncil = EnsureOneOf<
+	AccountId,
+	EnsureRoot<AccountId>,
+	pallet_collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>
+>;
+
+impl pallet_identity::Trait for Runtime {
+	type Event = Event;
+	type Currency = Balances;
+	type BasicDeposit = BasicDeposit;
+	type FieldDeposit = FieldDeposit;
+	type SubAccountDeposit = SubAccountDeposit;
+	type MaxSubAccounts = MaxSubAccounts;
+	type MaxAdditionalFields = MaxAdditionalFields;
+	type MaxRegistrars = MaxRegistrars;
+	type Slashed = ();
+	type ForceOrigin = EnsureRoot<AccountId>;
+	type RegistrarOrigin = EnsureRoot<AccountId>;
+	type WeightInfo = ();
+}
+
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
 	pub enum Runtime where
@@ -283,6 +318,7 @@ construct_runtime!(
 		Sudo: pallet_sudo::{Module, Call, Config<T>, Storage, Event<T>},
 		// Include the custom logic from the template pallet in the runtime.
 		TemplateModule: pallet_template::{Module, Call, Storage, Event<T>},
+		Identity: pallet_identity::{Module, Call, Storage, Event<T>},
 	}
 );
 
