@@ -23,9 +23,7 @@ use sp_version::RuntimeVersion;
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
 
-use frame_system::{EnsureOneOf, EnsureRoot};
-
-use sp_core::u32_trait::{_1, _2};
+use frame_system::EnsureRoot;
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -278,13 +276,6 @@ parameter_types! {
 	pub const MaxAdditionalFields: u32 = 2;
 	pub const MaxRegistrars: u32 = 20;
 }
-
-type CouncilCollective = pallet_collective::Instance1;
-type MoreThanHalfCouncil = EnsureOneOf<
-	AccountId,
-	EnsureRoot<AccountId>,
-	pallet_collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>
->;
 
 impl pallet_identity::Trait for Runtime {
 	type Event = Event;

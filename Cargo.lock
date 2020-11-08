@@ -3297,7 +3297,6 @@ dependencies = [
  "hex-literal",
  "pallet-aura",
  "pallet-balances",
- "pallet-collective",
  "pallet-grandpa",
  "pallet-identity",
  "pallet-randomness-collective-flip",
@@ -3516,22 +3515,6 @@ dependencies = [
  "frame-system",
  "parity-scale-codec",
  "serde",
- "sp-runtime",
- "sp-std",
-]
-
-[[package]]
-name = "pallet-collective"
-version = "2.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7f7e133ae2e98e59bdd9e794ffaa3cb2e7dc43d7ebe2525dd00aed688eb3563e"
-dependencies = [
- "frame-support",
- "frame-system",
- "parity-scale-codec",
- "serde",
- "sp-core",
- "sp-io",
  "sp-runtime",
  "sp-std",
 ]
